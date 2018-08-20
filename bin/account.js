@@ -57,8 +57,18 @@ getAccountNumbers(offset, limit, function (error, accountNumbers) {
         } else {
           //ignore area
           delete account.jurisdiction;
+
           //seed into majifix-account
-          Account.create(account, next);
+          const criteria = { number: account.number };
+          const options = {
+            new: true,
+            upsert: true,
+            runValidators: true,
+            setDefaultsOnInsert: true
+          };
+          Account
+            .findOneAndUpdate(criteria, account, options)
+            .exec(next);
         }
       });
     };
