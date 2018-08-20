@@ -14,7 +14,6 @@ const env = require('@lykmapipo/env');
 const { getNumber } = env;
 const { Account } = require('@codetanzania/majifix-account');
 const {
-  knex,
   getAccountNumbers,
   getAccount,
 } = require(path.join(__dirname, '..', 'lib', 'db'));
@@ -36,41 +35,33 @@ const MONGODB_URI = env('MONGODB_URI');
 if (!MONGODB_URI) { throw new Error('Missing MONGODB_URI in process.env'); }
 mongoose.connect(MONGODB_URI);
 
+/* fetch accounts and their profile */
+getAccountNumbers(offset, limit, function (error, accountNumbers) {
 
-/* initiate transaction */
-const txn = undefined;
-//knex
-//  .transaction(function (txn) {
+  //ensure account numbers
+  if (error) {
+    throw error;
+  }
 
-    /* fetch accounts and their profile */
-    getAccountNumbers(offset, limit, function (error, accountNumbers) {
+  //prepare accounts
+  let _accountNumbers = [].concat(accountNumbers);
+  _accountNumbers =
+    _.compact(_.uniq(_.map(_accountNumbers, 'accountNumber')));
+  let _getAccounts =
+    _.map(_accountNumbers, function (accountNumber) {
+      return function seedAccount(next) {
+        getAccount(accountNumber, next);
+      };
+    });
 
-      //ensure account numbers
-      if (error) {
-        throw error;
-      }
+  //migrate accounts in parallel
+  async.parallel(_getAccounts, function (error, accounts) {
+    if (error) {
+      throw error;
+    } else {
+      console.log(accounts);
+      console.log(_.map(accounts, 'number'));
+    }
+  });
 
-      //prepare accounts
-      let _accountNumbers = [].concat(accountNumbers);
-      _accountNumbers =
-        _.compact(_.uniq(_.map(_accountNumbers, 'accountNumber')));
-      let _getAccounts =
-        _.map(_accountNumbers, function (accountNumber) {
-          return function seedAccount(next) {
-            getAccount(accountNumber, next, txn);
-          };
-        });
-
-      //migrate accounts in parallel
-      async.parallel(_getAccounts, function (error, accounts) {
-        if (error) {
-          throw error;
-        } else {
-          console.log(accounts);
-          console.log(_.map(accounts, 'number'));
-        }
-      }, txn);
-
-    }, txn);
-
-  //});
+});
