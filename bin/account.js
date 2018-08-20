@@ -64,7 +64,7 @@ getAccountNumbers(offset, limit, function (error, accountNumbers) {
             new: true,
             upsert: true,
             runValidators: true,
-           // setDefaultsOnInsert: true
+            // setDefaultsOnInsert: true
           };
           Account
             .findOneAndUpdate(criteria, account, options)
@@ -81,7 +81,6 @@ getAccountNumbers(offset, limit, function (error, accountNumbers) {
       console.log(error);
       throw error;
     } else {
-      console.log(accounts);
       console.log(_.map(accounts, 'number'));
     }
   });
