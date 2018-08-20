@@ -45,14 +45,23 @@ getAccountNumbers(offset, limit, function (error, accountNumbers) {
 
   //prepare accounts
   let _accountNumbers = [].concat(accountNumbers);
-  _accountNumbers =
-    _.compact(_.uniq(_.map(_accountNumbers, 'accountNumber')));
-  let _getAccounts =
-    _.map(_accountNumbers, function (accountNumber) {
-      return function seedAccount(next) {
-        getAccount(accountNumber, next);
-      };
-    });
+  _accountNumbers = _.compact(_.uniq(_.map(_accountNumbers, 'accountNumber')));
+
+  //fetch account
+  let _getAccounts = _.map(_accountNumbers, function (accountNumber) {
+
+    return function seedAccount(next) {
+      getAccount(accountNumber, function (error, account) {
+        if (error) {
+          next(error);
+        } else {
+          //seed into majifix-account
+          Account.create(account, next);
+        }
+      });
+    };
+
+  });
 
   //migrate accounts in parallel
   async.parallel(_getAccounts, function (error, accounts) {
