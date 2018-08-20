@@ -55,6 +55,8 @@ getAccountNumbers(offset, limit, function (error, accountNumbers) {
         if (error) {
           next(error);
         } else {
+          //ignore area
+          delete account.jurisdiction;
           //seed into majifix-account
           Account.create(account, next);
         }
@@ -66,6 +68,7 @@ getAccountNumbers(offset, limit, function (error, accountNumbers) {
   //migrate accounts in parallel
   async.parallel(_getAccounts, function (error, accounts) {
     if (error) {
+      console.log(error);
       throw error;
     } else {
       console.log(accounts);
