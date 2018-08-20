@@ -62,6 +62,7 @@ getAccountNumbers(offset, limit, function (error, accountNumbers) {
     if (error) {
       throw error;
     } else {
+      console.log(accounts);
       console.log(_.map(accounts, 'number'));
     }
   });
