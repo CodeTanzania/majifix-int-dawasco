@@ -14,7 +14,6 @@ const env = require('@lykmapipo/env');
 const { getNumber } = env;
 const { Account } = require('@codetanzania/majifix-account');
 const {
-  knex,
   getAccountNumbers,
   getAccount,
 } = require(path.join(__dirname, '..', 'lib', 'db'));
@@ -37,39 +36,33 @@ if (!MONGODB_URI) { throw new Error('Missing MONGODB_URI in process.env'); }
 mongoose.connect(MONGODB_URI);
 
 
-/* initiate transaction */
-knex
-  .transaction(function (txn) {
+/* fetch accounts and their profile */
+getAccountNumbers(offset, limit, function (error, accountNumbers) {
 
-    /* fetch accounts and their profile */
-    getAccountNumbers(offset, limit, function (error, accountNumbers) {
+  //ensure account numbers
+  if (error) {
+    throw error;
+  }
 
-      //ensure account numbers
-      if (error) {
-        throw error;
-      }
+  //prepare accounts
+  let _accountNumbers = [].concat(accountNumbers);
+  _accountNumbers =
+    _.compact(_.uniq(_.map(_accountNumbers, 'accountNumber')));
+  let _getAccounts =
+    _.map(_accountNumbers, function (accountNumber) {
+      return function seedAccount(next) {
+        getAccount(accountNumber, next);
+      };
+    });
 
-      //prepare accounts
-      let _accountNumbers = [].concat(accountNumbers);
-      _accountNumbers =
-        _.compact(_.uniq(_.map(_accountNumbers, 'accountNumber')));
-      let _getAccounts =
-        _.map(_accountNumbers, function (accountNumber) {
-          return function seedAccount(next) {
-            getAccount(accountNumber, next, txn);
-          };
-        });
-
-      //migrate accounts in parallel
-      async.parallel(_getAccounts, function (error, accounts) {
-        if (error) {
-          throw error;
-        } else {
-          console.log(accounts);
-          console.log(_.map(accounts, 'number'));
-        }
-      }, txn);
-
-    }, txn);
-
+  //migrate accounts in parallel
+  async.parallel(_getAccounts, function (error, accounts) {
+    if (error) {
+      throw error;
+    } else {
+      console.log(accounts);
+      console.log(_.map(accounts, 'number'));
+    }
   });
+
+});
