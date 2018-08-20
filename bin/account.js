@@ -38,8 +38,9 @@ mongoose.connect(MONGODB_URI);
 
 
 /* initiate transaction */
-knex
-  .transaction(function (txn) {
+const txn = undefined;
+//knex
+//  .transaction(function (txn) {
 
     /* fetch accounts and their profile */
     getAccountNumbers(offset, limit, function (error, accountNumbers) {
@@ -72,4 +73,4 @@ knex
 
     }, txn);
 
-  });
+  //});
