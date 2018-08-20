@@ -64,7 +64,7 @@ getAccountNumbers(offset, limit, function (error, accountNumbers) {
             new: true,
             upsert: true,
             runValidators: true,
-            setDefaultsOnInsert: true
+           // setDefaultsOnInsert: true
           };
           Account
             .findOneAndUpdate(criteria, account, options)
