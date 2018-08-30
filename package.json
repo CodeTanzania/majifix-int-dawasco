@@ -3,11 +3,7 @@
   "version": "0.1.0",
   "description": "DAWASCO - MajiFix Integration",
   "main": "index.js",
-  "scripts": {
-    "test": "grunt test",
-    "dev": "BASE_PATH=./ nodemon ./index.js",
-    "upsert": "BASE_PATH=./ node ./lib/upsert.script.js"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/CodeTanzania/majifix-int-dawasco.git"
