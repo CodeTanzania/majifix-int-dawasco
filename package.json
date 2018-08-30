@@ -37,7 +37,9 @@
     "email": "lallyelias87@gmail.com"
   },
   "homepage": "https://github.com/CodeTanzania/majifix-int-dawasco",
-  "devDependencies": {},
+  "devDependencies": {
+    "mongoose": "^5.2.10"
+  },
   "dependencies": {
     "@codetanzania/majifix-common": "^0.9.0",
     "@lykmapipo/env": "^0.2.1",
