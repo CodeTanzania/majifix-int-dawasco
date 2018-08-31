@@ -1,6 +1,6 @@
 {
   "name": "@codetanzania/majifix-int-dawasco",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "DAWASCO - MajiFix Integration",
   "main": "index.js",
   "scripts": {},
