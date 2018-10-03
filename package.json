@@ -1,6 +1,6 @@
 {
   "name": "@codetanzania/majifix-int-dawasco",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "DAWASCO - MajiFix Integration helpers",
   "main": "index.js",
   "scripts": {},
@@ -34,16 +34,23 @@
   },
   "homepage": "https://github.com/CodeTanzania/majifix-int-dawasco",
   "devDependencies": {
-    "mongoose": "^5.2.12"
+    "@codetanzania/majifix-common": "^0.11.0",
+    "@lykmapipo/env": "^0.3.1",
+    "async": "^2.6.1",
+    "lodash": "^4.17.11",
+    "moment": "^2.22.2",
+    "mongoose": "^5.3.1"
+  },
+  "peerDependencies": {
+    "@codetanzania/majifix-common": "^0.11.0",
+    "@lykmapipo/env": "^0.3.1",
+    "async": "^2.6.1",
+    "lodash": "^4.17.11",
+    "moment": "^2.22.2"
   },
   "dependencies": {
-    "@codetanzania/majifix-common": "^0.9.0",
-    "@lykmapipo/env": "^0.2.1",
-    "async": "^2.6.1",
     "knex": "^0.15.2",
-    "lodash": "^4.17.10",
-    "moment": "^2.22.2",
-    "mssql": "^4.1.0"
+    "mssql": "4.1.0"
   },
   "engines": {
     "node": ">=8.11.1",
