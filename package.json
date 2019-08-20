@@ -34,22 +34,19 @@
   },
   "homepage": "https://github.com/CodeTanzania/majifix-int-dawasco",
   "devDependencies": {
-    "@codetanzania/majifix-common": "^0.11.0",
-    "@lykmapipo/env": "^0.3.1",
-    "async": "^2.6.1",
-    "lodash": "^4.17.11",
-    "moment": "^2.22.2",
-    "mongoose": "^5.3.1"
+    "mongoose": ">=5.6.9"
   },
   "peerDependencies": {
-    "@codetanzania/majifix-common": "^0.11.0",
-    "@lykmapipo/env": "^0.3.1",
-    "async": "^2.6.1",
-    "lodash": "^4.17.11",
-    "moment": "^2.22.2"
+    "mongoose": ">=5.6.9"
   },
   "dependencies": {
-    "knex": "^0.15.2",
+    "@codetanzania/majifix-common": ">=0.15.1",
+    "@lykmapipo/env": ">=0.12.1",
+    "@lykmapipo/phone": ">=0.5.4",
+    "async": ">=3.1.0",
+    "knex": "0.15.2",
+    "lodash": ">=4.17.15",
+    "moment": ">=2.24.0",
     "mssql": "4.1.0"
   },
   "engines": {
