@@ -34,15 +34,15 @@
   },
   "homepage": "https://github.com/CodeTanzania/majifix-int-dawasco",
   "devDependencies": {
-    "mongoose": ">=5.6.9"
+    "mongoose": ">=5.7.0"
   },
   "peerDependencies": {
-    "mongoose": ">=5.6.9"
+    "mongoose": ">=5.7.0"
   },
   "dependencies": {
-    "@codetanzania/majifix-common": ">=0.15.1",
-    "@lykmapipo/env": ">=0.12.1",
-    "@lykmapipo/phone": ">=0.5.4",
+    "@codetanzania/majifix-common": ">=0.17.0",
+    "@lykmapipo/env": ">=0.13.1",
+    "@lykmapipo/phone": ">=0.5.6",
     "async": ">=3.1.0",
     "knex": "0.15.2",
     "lodash": ">=4.17.15",
