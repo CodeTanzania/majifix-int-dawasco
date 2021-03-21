@@ -1,7 +1,7 @@
 language: node_js
-services: 
- - mongodb
 node_js:
- - "9.3.0"
-before_script:
- - npm install -g grunt-cli
+  - node
+script:
+  - commitlint-travis
+  - npm test
+after_success: npm run coverage
