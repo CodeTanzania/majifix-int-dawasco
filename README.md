@@ -1,13 +1,21 @@
 # majifix-int-dawasco
 
-[![Dependencies Status](https://david-dm.org/CodeTanzania/majifix-int-dawasco/status.svg?style=flat-square)](https://david-dm.org/CodeTanzania/majifix-int-dawasco)
+[![Build Status](https://travis-ci.org/CodeTanzania/majifix-int-dawasco.svg?branch=master)](https://travis-ci.org/CodeTanzania/majifix-int-dawasco)
+[![Dependencies Status](https://david-dm.org/CodeTanzania/majifix-int-dawasco.svg)](https://david-dm.org/CodeTanzania/majifix-int-dawasco)
+[![Coverage Status](https://coveralls.io/repos/github/CodeTanzania/majifix-int-dawasco/badge.svg?branch=master)](https://coveralls.io/github/CodeTanzania/majifix-int-dawasco?branch=master)
+[![GitHub License](https://img.shields.io/github/license/CodeTanzania/majifix-int-dawasco)](https://github.com/CodeTanzania/majifix-int-dawasco/blob/master/LICENSE) 
 
-MajiFix - DAWASCO Integration helpers
+[![Commitizen Friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Code Style](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
+[![npm version](https://img.shields.io/npm/v/@CodeTanzania/majifix-int-dawasco)](https://www.npmjs.com/package/@CodeTanzania/majifix-int-dawasco)
+
+MajiFix - DAWASA Integration helpers
 
 ## Requirements
 
-- [NodeJS v8.11.1+](https://nodejs.org)
-- [Npm v5.6.0+](https://www.npmjs.com/)
+- [NodeJS v12+](https://nodejs.org)
+- [Npm v6+](https://www.npmjs.com/)
 
 ## Installation
 
@@ -18,10 +26,14 @@ npm install @codetanzania/majifix-int-dawasco --save
 ## Usage
 
 ```js
-const { getBillHistory } = require('@codetanzania/majifix-int-dawasco');
+const { getBillStatements } = require('@codetanzania/majifix-int-dawasco');
 
-getBillHistory('<accountNumber>', (error, bills) => { ... });
+getBillStatements({ accountNumber: '...' }, (error, bills) => { ... });
+```
 
+## Environment
+```js
+BILL_BASE_URL=https://127.0.0.1/v1/
 ```
 
 ## Testing
@@ -54,7 +66,7 @@ It will be nice, if you open an issue first so that we can know what is going on
 
 The MIT License (MIT)
 
-Copyright (c) 2018 CodeTanzania & Contributors
+Copyright (c) CodeTanzania & Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
