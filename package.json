@@ -44,7 +44,7 @@
     "@lykmapipo/env": ">=0.13.1",
     "@lykmapipo/phone": ">=0.5.6",
     "async": ">=3.1.0",
-    "knex": "0.15.2",
+    "knex": "0.19.5",
     "lodash": ">=4.17.15",
     "moment": ">=2.24.0",
     "mssql": "4.1.0"
