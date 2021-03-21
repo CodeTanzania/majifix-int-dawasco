@@ -1,0 +1,17 @@
+{
+  "success": 200,
+  "custdata": [
+    {
+      "CUSTKEY": "A8801866",
+      "SURNAME": "JANE DOE",
+      "CURRENT_BALANCE": "-67006.4500",
+      "CONSUMPTION": "17",
+      "DATE_OF_READING": "2021/03/10",
+      "CURRENT_CHARGES": "28553.7000",
+      "OPENING_BALANCE": "4439.8500",
+      "CR_READING": "1032",
+      "PR_READING": "1015",
+      "STATEMENT_NO": "S2103J015310264"
+    }
+  ]
+}
