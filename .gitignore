@@ -10,6 +10,7 @@ pids
 # Temporary
 .tmp
 .grunt
+.husky
 
 # Dependencies
 node_modules
