@@ -1,5 +1,8 @@
 import { expect, nock } from '@lykmapipo/test-helpers';
 
+import accountResponse from './fixtures/account_details.json';
+import accountDetails from './fixtures/account.json';
+
 import {
   DEFAULT_JURISDICTION,
   DEFAULT_CUSTOMER_CATEGORY,
@@ -19,9 +22,20 @@ import {
   DEFAULT_USER,
 } from '../src';
 
+import {
+  toDate,
+  normalizeAccount,
+  normalizeBillHistory,
+  normalizeApiOptions,
+  isSuccessResponse,
+} from '../src/utils';
+
+import { getAccount, getAccountDetails } from '../src/api';
+
 describe('majifix-int-dawasco', () => {
   beforeEach(() => {
     delete process.env.BILL_API_BASE_URL;
+    delete process.env.BILL_API_ACCOUNT_DETAILS_URL;
     nock.cleanAll();
   });
 
@@ -83,8 +97,107 @@ describe('majifix-int-dawasco', () => {
     });
   });
 
+  it('should parse date', () => {
+    expect(toDate).to.be.a('function');
+  });
+
+  it('should normalize account', () => {
+    expect(normalizeAccount).to.be.a('function');
+  });
+
+  it('should normalize bill bistory', () => {
+    expect(normalizeBillHistory).to.be.a('function');
+  });
+
+  it('should normalize api options', () => {
+    expect(normalizeApiOptions).to.be.a('function');
+    expect(
+      normalizeApiOptions({
+        accountNumber: 'A8801866',
+        meterNumber: '15-17-D41320015',
+        plateNumber: 'T525ABC',
+        phoneNumber: '255754625756',
+      })
+    ).to.eql({
+      cust_acc: 'A8801866',
+      meter_no: '15-17-D41320015',
+      plateno: 'T525ABC',
+      phoneno: '255754625756',
+    });
+
+    expect(
+      normalizeApiOptions({
+        accountNumber: 'A880 1866',
+        meterNumber: '15-17- D41320015',
+        plateNumber: 'T 525 ABC',
+        phoneNumber: '255 7546 25756',
+      })
+    ).to.eql({
+      cust_acc: 'A8801866',
+      meter_no: '15-17-D41320015',
+      plateno: 'T525ABC',
+      phoneno: '255754625756',
+    });
+  });
+
+  it('should check if response is success', () => {
+    expect(isSuccessResponse({ success: undefined })).to.be.equal(false);
+    expect(isSuccessResponse({ success: '1' })).to.be.equal(false);
+    expect(isSuccessResponse({ success: '200' })).to.be.equal(true);
+    expect(isSuccessResponse({ success: 200 })).to.be.equal(true);
+    expect(isSuccessResponse({ success: 401 })).to.be.equal(false);
+  });
+
+  it('should obtain account details', (done) => {
+    process.env.BILL_API_BASE_URL = 'https://127.0.0.1/v1/';
+
+    process.env.BILL_API_ACCOUNT_DETAILS_URL =
+      'https://127.0.0.1/v1/account_details';
+
+    const optns = { accountNumber: 'A8801866' };
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/account_details')
+      .query(true)
+      .reply(200, accountResponse);
+
+    getAccountDetails(optns)
+      .then((account) => {
+        expect(account).to.exist;
+        expect(account).to.exist;
+        expect(account).to.be.eql(accountDetails);
+        done(null, account);
+      })
+      .catch((error) => done(error));
+  });
+
+  it('should obtain account', (done) => {
+    process.env.BILL_API_BASE_URL = 'https://127.0.0.1/v1/';
+
+    process.env.BILL_API_ACCOUNT_DETAILS_URL =
+      'https://127.0.0.1/v1/account_details';
+
+    const optns = { accountNumber: 'A8801866' };
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/account_details')
+      .query(true)
+      .reply(200, accountResponse);
+
+    getAccount(optns)
+      .then((account) => {
+        console.log(account);
+        expect(account).to.exist;
+        expect(account).to.exist;
+        // expect(account).to.be.eql(accountDetails);
+        done(null, account);
+      })
+      .catch((error) => done(error));
+  });
+
   afterEach(() => {
     delete process.env.BILL_API_BASE_URL;
+    delete process.env.BILL_API_ACCOUNT_DETAILS_URL;
     nock.cleanAll();
   });
 });

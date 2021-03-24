@@ -1,6 +1,8 @@
 import { compact, first, isEmpty, last, map } from 'lodash';
 import { getString, getNumber, getStrings } from '@lykmapipo/env';
 
+// TODO: default longitude and latitude
+
 export const DEFAULT_JURISDICTION = getString(
   'DEFAULT_JURISDICTION',
   'Gerezani'
