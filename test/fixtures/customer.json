@@ -3,17 +3,18 @@
   "category": "Domestic",
   "number": "A8801866",
   "name": "JANE DOE",
-  "phone": "255754625756",
+  "phone": "255754756625",
   "email": "",
   "neighborhood": "KILONGAWIMA",
   "address": "88195, KUNDUNCHI, KILONGAWIMA, Tegeta, DAR ES SALAAM",
   "locale": "sw",
   "active": true,
-  "identity": "",
+  "identity": "15-17-D00132154",
   "plot": "88195",
   "house": "KUNDUNCHI",
   "city": "DAR ES SALAAM",
-  "longitude": "",
-  "latitude": "",
-  "balance": ""
+  "longitude": "39.21020000",
+  "latitude": "-6.69520000",
+  "balance": "-67006.4500",
+  "location": { "type": "Point", "coordinates": [39.2102, -6.6952] }
 }

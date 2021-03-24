@@ -2,6 +2,8 @@ import { expect, nock } from '@lykmapipo/test-helpers';
 
 import accountResponse from './fixtures/account_details.json';
 import accountDetails from './fixtures/account.json';
+import customerResponse from './fixtures/customer_details.json';
+import customerDetails from './fixtures/customer.json';
 
 import {
   DEFAULT_JURISDICTION,
@@ -30,7 +32,7 @@ import {
   isSuccessResponse,
 } from '../src/utils';
 
-import { getAccount, getAccountDetails } from '../src/api';
+import { getAccount, getAccountDetails, getCustomerDetails } from '../src/api';
 
 describe('majifix-int-dawasco', () => {
   beforeEach(() => {
@@ -171,11 +173,37 @@ describe('majifix-int-dawasco', () => {
       .catch((error) => done(error));
   });
 
+  it('should obtain customer details', (done) => {
+    process.env.BILL_API_BASE_URL = 'https://127.0.0.1/v1/';
+
+    process.env.BILL_API_CUSTOMER_DETAILS_URL =
+      'https://127.0.0.1/v1/customer_details';
+
+    const optns = { accountNumber: 'A8801866' };
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/customer_details')
+      .query(true)
+      .reply(200, customerResponse);
+
+    getCustomerDetails(optns)
+      .then((customer) => {
+        expect(customer).to.exist;
+        expect(customer).to.exist;
+        expect(customer).to.be.eql(customerDetails);
+        done(null, customer);
+      })
+      .catch((error) => done(error));
+  });
+
   it('should obtain account', (done) => {
     process.env.BILL_API_BASE_URL = 'https://127.0.0.1/v1/';
 
     process.env.BILL_API_ACCOUNT_DETAILS_URL =
       'https://127.0.0.1/v1/account_details';
+
+    process.env.BILL_API_CUSTOMER_DETAILS_URL =
+      'https://127.0.0.1/v1/customer_details';
 
     const optns = { accountNumber: 'A8801866' };
 
@@ -183,6 +211,11 @@ describe('majifix-int-dawasco', () => {
       .post('/account_details')
       .query(true)
       .reply(200, accountResponse);
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/customer_details')
+      .query(true)
+      .reply(200, customerResponse);
 
     getAccount(optns)
       .then((account) => {

@@ -321,16 +321,20 @@ export const extractAccountDetails = (results = {}) => {
     trim(get(data, 'DEPM_CODE', '')).substring(0, 1)
   );
   myAccount.number = toUpper(trim(get(data, 'CUSTKEY')));
+  myAccount.identity = toUpper(trim(get(data, 'METER_REF')));
   myAccount.name = toUpper(
-    [trim(get(data, 'INITIAL')), trim(get(data, 'SURNAME'))].join(' ')
+    trim([trim(get(data, 'INITIAL')), trim(get(data, 'SURNAME'))].join(' '))
   );
   myAccount.phone = toUpper(trim(get(data, 'CELL_TEL_NO')));
   myAccount.plot = trim(get(data, 'UA_ADRESS1'));
   myAccount.house = trim(get(data, 'UA_ADRESS2'));
   myAccount.neighborhood = trim(get(data, 'UA_ADRESS3'));
   myAccount.city = trim(get(data, 'UA_ADRESS4'));
+  myAccount.longitude = trim(get(data, 'X_GPS'));
+  myAccount.latitude = trim(get(data, 'Y_GPS'));
+  myAccount.balance = trim(get(data, 'Balance'));
 
-  // normalize accout data
+  // normalize account data
   myAccount = normalizeAccount(myAccount);
 
   // return normalized account

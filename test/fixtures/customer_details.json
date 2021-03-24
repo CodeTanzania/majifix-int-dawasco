@@ -1,0 +1,22 @@
+{
+  "success": 200,
+  "feedh": [
+    {
+      "DEPM_CODE": "J0315",
+      "CUSTKEY": "A8801866",
+      "METER_REF": "15-17-D00132154",
+      "SURNAME": "JANE DOE",
+      "CELL_TEL_NO": "255754756625",
+      "LAST_PAYMENT": "100000.0000",
+      "UA_ADRESS1": "88195",
+      "UA_ADRESS2": "PLOT NO. KUNDUNCHI",
+      "UA_ADRESS3": "BLOCK NO. KILONGAWIMA",
+      "UA_ADRESS4": "DAR ES SALAAM",
+      "X_GPS": "39.21020000",
+      "Y_GPS": "-6.69520000",
+      "LAST_PAY_DATE": "2021-02-23",
+      "DueDate": "2021-03-10",
+      "Balance": "-67006.4500"
+    }
+  ]
+}
