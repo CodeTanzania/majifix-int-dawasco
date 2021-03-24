@@ -1,12 +1,9 @@
-import { getStatements } from '@codetanzania/majifix-int-dawasco';
+import { getString } from '@lykmapipo/env';
+import { fetchAccount } from '../src';
 
-process.env.BILL_BASE_URL = '';
+const accountNumber = getString('DEFAULT_ACCOUNT_NUMBER');
 
 // request customer statements
-getStatements({ accountNumber: '' })
-  .then(statements => {
-    console.log(data);
-  })
-  .catch(error => {
-    console.log(error);
-  });
+fetchAccount(accountNumber, new Date(), (error, account) => {
+  console.log(error, account);
+});
