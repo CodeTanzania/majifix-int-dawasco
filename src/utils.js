@@ -340,3 +340,47 @@ export const extractAccountDetails = (results = {}) => {
   // return normalized account
   return myAccount;
 };
+
+/**
+ * @name extractBillDetails
+ * @function extractBillDetails
+ * @description Extract bill details from api response
+ * @param {object} results Valid api response
+ * @param {object[]} [results.markers] Valid api data
+ * @returns {object} Extracted bill details
+ * @author lally elias <lallyelias87@mail.com>
+ * @since 0.1.0
+ * @version 0.1.0
+ * @public
+ * @static
+ */
+export const extractBillDetails = (results) => {
+  let myBills = map(results, (data) => {
+    // prepare bill data
+    const myBill = {};
+
+    // pick bills data
+    myBill.accountNumber = toUpper(trim(get(data, 'CUSTKEY')));
+    myBill.phone = toUpper(trim(get(data, 'CELL_TEL_NO')));
+    myBill.name = toUpper(
+      trim([trim(get(data, 'INITIAL')), trim(get(data, 'SURNAME'))].join(' '))
+    );
+    myBill.category = toUpper(trim(get(data, 'CONSUMER_TYPE_DESC')));
+    myBill.number = toUpper(trim(get(data, 'GEPG_CONTROL_NO')));
+    myBill.openBalance = trim(get(data, 'OPENING_BALANCE'));
+    myBill.closeBalance = trim(get(data, 'CURRENT_BALANCE'));
+    myBill.outstandBalance = trim(get(data, 'CURRENT_BALANCE'));
+    myBill.currentCharges = trim(get(data, 'CURRENT_CHARGES'));
+    myBill.currentReading = trim(get(data, 'CR_READING'));
+    myBill.previousReading = trim(get(data, 'PR_READING'));
+    myBill.readingDate = trim(get(data, 'DATE_OF_READING'));
+    myBill.consumption = trim(get(data, 'CONSUMPTION'));
+
+    // return normalized bill
+    return myBill;
+  });
+
+  // compact myBills
+  myBills = compact(myBills);
+  return myBills;
+};

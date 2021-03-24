@@ -4,6 +4,9 @@ import accountResponse from './fixtures/account_details.json';
 import accountDetails from './fixtures/account.json';
 import customerResponse from './fixtures/customer_details.json';
 import customerDetails from './fixtures/customer.json';
+import currentBillResponse from './fixtures/current_bill.json';
+import previousBillsResponse from './fixtures/previous_bills.json';
+// import billsDetails from './fixtures/bills.json';
 
 import {
   DEFAULT_JURISDICTION,
@@ -32,7 +35,12 @@ import {
   isSuccessResponse,
 } from '../src/utils';
 
-import { getAccount, getAccountDetails, getCustomerDetails } from '../src/api';
+import {
+  getAccount,
+  getAccountDetails,
+  getCustomerDetails,
+  getBillHistory,
+} from '../src/api';
 
 describe('majifix-int-dawasco', () => {
   beforeEach(() => {
@@ -166,7 +174,6 @@ describe('majifix-int-dawasco', () => {
     getAccountDetails(optns)
       .then((account) => {
         expect(account).to.exist;
-        expect(account).to.exist;
         expect(account).to.be.eql(accountDetails);
         done(null, account);
       })
@@ -189,9 +196,36 @@ describe('majifix-int-dawasco', () => {
     getCustomerDetails(optns)
       .then((customer) => {
         expect(customer).to.exist;
-        expect(customer).to.exist;
         expect(customer).to.be.eql(customerDetails);
         done(null, customer);
+      })
+      .catch((error) => done(error));
+  });
+
+  it('should obtain bill history', (done) => {
+    process.env.BILL_API_BASE_URL = 'https://127.0.0.1/v1/';
+
+    process.env.BILL_API_CURRENT_URL = 'https://127.0.0.1/v1/current_bill';
+
+    process.env.BILL_API_PREVIOUS_URL = 'https://127.0.0.1/v1/previous_bills';
+
+    const optns = { accountNumber: 'A8801866' };
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/current_bill')
+      .query(true)
+      .reply(200, currentBillResponse);
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/previous_bills')
+      .query(true)
+      .reply(200, previousBillsResponse);
+
+    getBillHistory(optns)
+      .then((bills) => {
+        expect(bills).to.exist;
+        // expect(bills).to.be.eql(billsDetails);
+        done(null, bills);
       })
       .catch((error) => done(error));
   });
@@ -205,7 +239,21 @@ describe('majifix-int-dawasco', () => {
     process.env.BILL_API_CUSTOMER_DETAILS_URL =
       'https://127.0.0.1/v1/customer_details';
 
+    process.env.BILL_API_CURRENT_URL = 'https://127.0.0.1/v1/current_bill';
+
+    process.env.BILL_API_PREVIOUS_URL = 'https://127.0.0.1/v1/previous_bills';
+
     const optns = { accountNumber: 'A8801866' };
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/current_bill')
+      .query(true)
+      .reply(200, currentBillResponse);
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/previous_bills')
+      .query(true)
+      .reply(200, previousBillsResponse);
 
     nock(process.env.BILL_API_BASE_URL)
       .post('/account_details')
@@ -219,8 +267,6 @@ describe('majifix-int-dawasco', () => {
 
     getAccount(optns)
       .then((account) => {
-        console.log(account);
-        expect(account).to.exist;
         expect(account).to.exist;
         // expect(account).to.be.eql(accountDetails);
         done(null, account);

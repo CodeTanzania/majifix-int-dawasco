@@ -1,0 +1,17 @@
+{
+  "markers": [
+    {
+      "CUSTKEY": "A8801866",
+      "GEPG_CONTROL_NO": "991069948651",
+      "OPENING_BALANCE": "-95560.15",
+      "CURRENT_BALANCE": "-67006.45",
+      "CURRENT_CHARGES": "28553.70",
+      "CR_READING": "1032",
+      "PR_READING": "1015",
+      "DATE_OF_READING": "2021/03/10",
+      "CONSUMPTION": "17",
+      "CELL_TEL_NO": "255754625756",
+      "CONSUMER_TYPE_DESC": "Domestic"
+    }
+  ]
+}

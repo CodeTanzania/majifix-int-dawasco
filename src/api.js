@@ -1,12 +1,57 @@
-import { merge } from 'lodash';
+import { compact, first, get, orderBy, tail } from 'lodash';
+import { mergeObjects } from '@lykmapipo/common';
 import { getString } from '@lykmapipo/env';
 import { all, post, spread } from '@lykmapipo/http-client';
+
+import { DEFAULT_BILL } from './defaults';
 
 import {
   isSuccessResponse,
   extractAccountDetails,
+  extractBillDetails,
+  normalizeBillHistory,
   normalizeApiOptions,
 } from './utils';
+
+/**
+ * @name getCustomerDetails
+ * @function getCustomerDetails
+ * @description Obtain customer details
+ * @param {object} optns Valid options
+ * @param {string} optns.accountNumber Valid customer account number
+ * @param {string} optns.meterNumber Valid customer meter number
+ * @returns {object} account customer account details
+ * @author lally elias <lallyelias87@mail.com>
+ * @since 0.1.0
+ * @version 0.1.0
+ * @public
+ * @static
+ */
+export const getCustomerDetails = (optns) => {
+  // TODO: allow fetch customer identity
+
+  // normalize api options
+  const body = normalizeApiOptions(optns);
+
+  // obtain customer details api url
+  const BILL_API_CUSTOMER_DETAILS_URL = getString(
+    'BILL_API_CUSTOMER_DETAILS_URL'
+  );
+
+  // request customer details
+  return post(BILL_API_CUSTOMER_DETAILS_URL, body).then((response = {}) => {
+    // ensure success response
+    if (!isSuccessResponse(response)) {
+      throw new Error('Invalid Request');
+    }
+
+    // extract customer from response
+    const data = extractAccountDetails(response);
+
+    // return customer details
+    return data;
+  });
+};
 
 /**
  * @name getAccountDetails
@@ -14,7 +59,6 @@ import {
  * @description Obtain customer account details
  * @param {object} optns Valid options
  * @param {string} optns.accountNumber Valid customer account number
- * @param {string} optns.meterNumber Valid customer meter number
  * @returns {object} account customer account details
  * @author lally elias <lallyelias87@mail.com>
  * @since 0.1.0
@@ -47,41 +91,63 @@ export const getAccountDetails = (optns) => {
 };
 
 /**
- * @name getCustomerDetails
- * @function getCustomerDetails
- * @description Obtain customer details
+ * @name getBillHistory
+ * @function getBillHistory
+ * @description Obtain customer bill history
  * @param {object} optns Valid options
  * @param {string} optns.accountNumber Valid customer account number
- * @param {string} optns.meterNumber Valid customer meter number
- * @returns {object} account customer account details
+ * @returns {object} current bill
  * @author lally elias <lallyelias87@mail.com>
  * @since 0.1.0
  * @version 0.1.0
  * @public
  * @static
  */
-export const getCustomerDetails = (optns) => {
+export const getBillHistory = (optns) => {
   // normalize api options
   const body = normalizeApiOptions(optns);
 
-  // obtain customer details api url
-  const BILL_API_CUSTOMER_DETAILS_URL = getString(
-    'BILL_API_CUSTOMER_DETAILS_URL'
-  );
+  // obtain current bill api url
+  const BILL_API_CURRENT_URL = getString('BILL_API_CURRENT_URL');
 
-  // request customer details
-  return post(BILL_API_CUSTOMER_DETAILS_URL, body).then((response = {}) => {
-    // ensure success response
-    if (!isSuccessResponse(response)) {
-      throw new Error('Invalid Request');
-    }
+  // obtain previous bills api url
+  const BILL_API_PREVIOUS_URL = getString('BILL_API_PREVIOUS_URL');
 
-    // extract customer from response
-    const data = extractAccountDetails(response);
+  // get current bill
+  const getCurrent = post(BILL_API_CURRENT_URL, body).then((response = {}) => {
+    // TODO: ensure success response
 
-    // return customer details
+    // extract current bill from response
+    let data = compact(get(response, 'markers', []));
+    data = extractBillDetails(data);
+
+    // return current bill
     return data;
   });
+
+  // get previous bills
+  const getPrevious = post(BILL_API_PREVIOUS_URL, body).then(
+    (response = {}) => {
+      // TODO: ensure success response
+
+      // extract previous bills from response
+      let data = compact([].concat(response));
+      data = extractBillDetails(data);
+
+      // return previous bills
+      return data;
+    }
+  );
+
+  // request current and previous bills in parallel
+  const requests = [getCurrent, getPrevious];
+  return all(...requests).then(
+    spread((current, previous) => {
+      let bills = compact([].concat(current).concat(previous));
+      bills = normalizeBillHistory(bills);
+      return bills;
+    })
+  );
 };
 
 /**
@@ -99,16 +165,53 @@ export const getCustomerDetails = (optns) => {
  * @static
  */
 export const getAccount = (optns) => {
-  // request account details (acccount, customer, accessors)
-  const requests = [getAccountDetails(optns), getCustomerDetails(optns)];
+  // first get customer details
+  return getCustomerDetails(optns).then((customer) => {
+    // obtain customer account number
+    const opts = { accountNumber: customer.number };
 
-  // issue all requests in parallel
-  return all(...requests).then(
-    spread((account = {}, customer = {}) => {
-      // merge ddetails
-      const myAccount = merge({}, customer, account);
+    // request account details (acccount, accessors, bill history)
+    const requests = [getAccountDetails(opts), getBillHistory(opts)];
 
-      return myAccount;
-    })
-  );
+    // issue all requests in parallel using
+    return all(...requests).then(
+      // spread api rsults
+      spread((account = {}, bills = []) => {
+        // prepare normalized account
+        const myAccount = {
+          account: {},
+          customer: {},
+          bills: [],
+          accessors: [],
+          fetchedAt: new Date(),
+        };
+
+        // merge account results
+        myAccount.account = mergeObjects(customer, account);
+
+        // ensure account identity
+        myAccount.account.identity = customer.identity;
+
+        // ensure bill order
+        let myBills = orderBy([].concat(bills), 'period.billedAt', 'desc');
+
+        // obtain previous bills
+        const myPreviousBills = tail(myBills);
+
+        // ensure latest bill balance after payment
+        const myCurrentBill = mergeObjects(DEFAULT_BILL, first(myBills));
+        myCurrentBill.balance.close = Number(
+          account.balance || customer.balance || myCurrentBill.balance.close
+        );
+
+        // reconstruct bills
+        myBills = [].concat(myCurrentBill).concat(myPreviousBills);
+        myBills = orderBy([].concat(myBills), 'period.billedAt', 'desc');
+        myAccount.bills = myBills;
+
+        // return normalized account
+        return myAccount;
+      })
+    );
+  });
 };

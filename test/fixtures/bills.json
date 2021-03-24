@@ -1,0 +1,109 @@
+[
+  {
+    "number": "991069948651",
+    "notes": "LIPIA ANKARA YAKO MAPEMA KUEPUKA USUMBUFU WA KUKATIWA MAJI",
+    "currency": "TZS",
+    "period": {
+      "name": "March2021",
+      "billedAt": "2021-03-09T21:00:00.000Z",
+      "startedAt": "2021-02-07T21:00:00.000Z",
+      "endedAt": "2021-03-09T21:00:00.000Z",
+      "duedAt": "2021-03-16T21:00:00.000Z"
+    },
+    "balance": {
+      "debt": 0,
+      "outstand": -67006.45,
+      "open": -95560.15,
+      "close": -67006.45,
+      "charges": 28553.7
+    },
+    "items": [
+      {
+        "name": "Water Charge",
+        "quantity": 17,
+        "unit": "cbm",
+        "price": 28553.7,
+        "items": [
+          { "name": "Previous Readings", "quantity": 1015, "unit": "cbm" },
+          {
+            "name": "Current Readings",
+            "quantity": 1032,
+            "unit": "cbm",
+            "time": "2021-03-09T21:00:00.000Z"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "number": "",
+    "notes": "LIPIA ANKARA YAKO MAPEMA KUEPUKA USUMBUFU WA KUKATIWA MAJI",
+    "currency": "TZS",
+    "period": {
+      "name": "February2021",
+      "billedAt": "2021-02-07T21:00:00.000Z",
+      "startedAt": "2021-01-07T21:00:00.000Z",
+      "endedAt": "2021-02-07T21:00:00.000Z",
+      "duedAt": "2021-02-14T21:00:00.000Z"
+    },
+    "balance": {
+      "debt": 0,
+      "outstand": 4439.85,
+      "open": -35871.25,
+      "close": 4439.85,
+      "charges": 40311.1
+    },
+    "items": [
+      {
+        "name": "Water Charge",
+        "quantity": 24,
+        "unit": "cbm",
+        "price": 40311.1,
+        "items": [
+          { "name": "Previous Readings", "quantity": 991, "unit": "cbm" },
+          {
+            "name": "Current Readings",
+            "quantity": 1015,
+            "unit": "cbm",
+            "time": "2021-02-07T21:00:00.000Z"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "number": "",
+    "notes": "LIPIA ANKARA YAKO MAPEMA KUEPUKA USUMBUFU WA KUKATIWA MAJI",
+    "currency": "TZS",
+    "period": {
+      "name": "January2021",
+      "billedAt": "2021-01-07T21:00:00.000Z",
+      "endedAt": "2021-01-07T21:00:00.000Z",
+      "duedAt": "2021-01-14T21:00:00.000Z"
+    },
+    "balance": {
+      "debt": 0,
+      "outstand": -35871.25,
+      "open": -79541.65,
+      "close": -35871.25,
+      "charges": 43670.4
+    },
+    "items": [
+      {
+        "name": "Water Charge",
+        "quantity": 26,
+        "unit": "cbm",
+        "price": 43670.4,
+        "items": [
+          { "name": "Previous Readings", "quantity": 965, "unit": "cbm" },
+          {
+            "name": "Current Readings",
+            "quantity": 991,
+            "unit": "cbm",
+            "time": "2021-01-07T21:00:00.000Z"
+          }
+        ]
+      }
+    ]
+  }
+]
