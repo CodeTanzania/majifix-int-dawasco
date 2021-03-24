@@ -26,9 +26,9 @@ npm install @codetanzania/majifix-int-dawasco --save
 ## Usage
 
 ```js
-const { getBillStatements } = require('@codetanzania/majifix-int-dawasco');
+const { fetchAccount } = require('@codetanzania/majifix-int-dawasco');
 
-getBillStatements({ accountNumber: '...' }, (error, bills) => { ... });
+fetchAccount(accountNumber, new Date(), (error, account) => { ... });
 ```
 
 ## Environment
