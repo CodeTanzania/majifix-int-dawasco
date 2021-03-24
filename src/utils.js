@@ -264,9 +264,13 @@ export const normalizeApiOptions = (optns = {}) => {
     meter_no: toNormal(optns.meterNumber),
     plateno: toNormal(optns.plateNumber),
     phoneno: toNormal(optns.phoneNumber),
+    pond: toNormal(optns.pondNumber),
   });
 
-  // TODO: ensure phone number in E164
+  // ensure phone number in E164
+  if (options.phoneno) {
+    options.phoneno = toE164(options.phoneno) || options.phoneno;
+  }
 
   // return options
   return options;

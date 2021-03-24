@@ -128,12 +128,14 @@ describe('majifix-int-dawasco', () => {
         meterNumber: '15-17-D41320015',
         plateNumber: 'T525ABC',
         phoneNumber: '255754625756',
+        pondNumber: '6',
       })
     ).to.eql({
       cust_acc: 'A8801866',
       meter_no: '15-17-D41320015',
       plateno: 'T525ABC',
       phoneno: '255754625756',
+      pond: '6',
     });
 
     expect(
