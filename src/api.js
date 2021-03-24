@@ -42,7 +42,7 @@ export const getCustomerDetails = (optns) => {
   return post(BILL_API_CUSTOMER_DETAILS_URL, body).then((response = {}) => {
     // ensure success response
     if (!isSuccessResponse(response)) {
-      throw new Error('Invalid Request');
+      throw new Error(response.message || 'Invalid Request');
     }
 
     // extract customer from response
@@ -79,7 +79,7 @@ export const getAccountDetails = (optns) => {
   return post(BILL_API_ACCOUNT_DETAILS_URL, body).then((response = {}) => {
     // ensure success response
     if (!isSuccessResponse(response)) {
-      throw new Error('Invalid Request');
+      throw new Error(response.message || 'Invalid Request');
     }
 
     // extract account from response
@@ -266,7 +266,7 @@ export const getPondBillNumber = (optns) => {
   return post(PONDS_API_BILL_NUMBER_URL, body).then((response = {}) => {
     // ensure success response
     if (!isSuccessResponse(response)) {
-      throw new Error('Invalid Request');
+      throw new Error(response.message || 'Invalid Request');
     }
 
     // extract ponds bill pay number from response

@@ -20,7 +20,8 @@
     "changelog": "changelog",
     "chore:deps": "ncu -u && npm install --save",
     "lint:config": "eslint --print-config rollup.config.js",
-    "start": "NODE_ENV=development BASE_PATH=./examples babel-node ./examples/index.js"
+    "bills": "NODE_ENV=development BASE_PATH=./examples babel-node ./examples/bills.js",
+    "ponds": "NODE_ENV=development BASE_PATH=./examples babel-node ./examples/ponds.js"
   },
   "keywords": [
     "codetanzania",
