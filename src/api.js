@@ -215,3 +215,27 @@ export const getAccount = (optns) => {
     );
   });
 };
+
+/**
+ * @name fetchAccount
+ * @function fetchAccount
+ * @description Obtain full customer account details if it has been updated
+ * since last time fetched
+ * @param {string} accountNumber valid customer account number
+ * @param {Date} updatedAt Last fetch date
+ * @param {Function} done a callback to invoke on success or error
+ * @author lally elias <lallyelias87@mail.com>
+ * @since 0.1.0
+ * @version 0.1.0
+ * @public
+ * @static
+ */
+export const fetchAccount = (accountNumber, updatedAt, done) => {
+  getAccount({ accountNumber })
+    .then((account) => {
+      done(null, account);
+    })
+    .catch((error) => {
+      done(error);
+    });
+};
