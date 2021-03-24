@@ -1,2 +1,2 @@
 export * from './defaults';
-export { fetchAccount } from './api';
+export { fetchAccount, fetchPondBillNumber } from './api';

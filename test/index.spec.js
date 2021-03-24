@@ -7,6 +7,7 @@ import customerDetails from './fixtures/customer.json';
 import currentBillResponse from './fixtures/current_bill.json';
 import previousBillsResponse from './fixtures/previous_bills.json';
 // import billsDetails from './fixtures/bills.json';
+import pondResponse from './fixtures/ponds.json';
 
 import {
   DEFAULT_JURISDICTION,
@@ -26,6 +27,7 @@ import {
   DEFAULT_BILL,
   DEFAULT_USER,
   fetchAccount,
+  fetchPondBillNumber,
 } from '../src';
 
 import {
@@ -41,6 +43,7 @@ import {
   getAccountDetails,
   getCustomerDetails,
   getBillHistory,
+  getPondBillNumber,
 } from '../src/api';
 
 describe('majifix-int-dawasco', () => {
@@ -316,6 +319,56 @@ describe('majifix-int-dawasco', () => {
       expect(account).to.exist;
       // expect(account).to.be.eql(accountDetails);
       done(error, account);
+    });
+  });
+
+  it('should obtain pond bill', (done) => {
+    process.env.BILL_API_BASE_URL = 'https://127.0.0.1/v1/';
+
+    process.env.PONDS_API_BILL_NUMBER_URL =
+      'https://127.0.0.1/v1/pond_bill_number';
+
+    const optns = {
+      plateNumber: 'T991DAU',
+      phoneNumber: '255754625756',
+      pondNUmber: '1',
+    };
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/pond_bill_number')
+      .query(true)
+      .reply(200, pondResponse);
+
+    getPondBillNumber(optns)
+      .then((bill) => {
+        expect(bill).to.exist;
+        expect(bill).to.be.eql(pondResponse);
+        done(null, bill);
+      })
+      .catch((error) => done(error));
+  });
+
+  it('should fetch pond bill', (done) => {
+    process.env.BILL_API_BASE_URL = 'https://127.0.0.1/v1/';
+
+    process.env.PONDS_API_BILL_NUMBER_URL =
+      'https://127.0.0.1/v1/pond_bill_number';
+
+    const optns = {
+      plateNumber: 'T991DAU',
+      phoneNumber: '255754625756',
+      pondNUmber: '1',
+    };
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/pond_bill_number')
+      .query(true)
+      .reply(200, pondResponse);
+
+    fetchPondBillNumber(optns, (error, bill) => {
+      expect(bill).to.exist;
+      expect(bill).to.be.eql(pondResponse);
+      done(error, bill);
     });
   });
 

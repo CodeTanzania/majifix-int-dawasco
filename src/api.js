@@ -239,3 +239,65 @@ export const fetchAccount = (accountNumber, updatedAt, done) => {
       done(error);
     });
 };
+
+/**
+ * @name getPondBillNumber
+ * @function getPondBillNumber
+ * @description Obtain pond bill pay number
+ * @param {object} optns Valid options
+ * @param {string} optns.plateNumber Valid customer car plate number
+ * @param {string} optns.phoneNumber Valid customer phone number
+ * @param {string} optns.pondNumber Valid pond number
+ * @returns {object} pond bill pay details
+ * @author lally elias <lallyelias87@mail.com>
+ * @since 0.1.0
+ * @version 0.1.0
+ * @public
+ * @static
+ */
+export const getPondBillNumber = (optns) => {
+  // normalize api options
+  const body = normalizeApiOptions(optns);
+
+  // obtain customer details api url
+  const PONDS_API_BILL_NUMBER_URL = getString('PONDS_API_BILL_NUMBER_URL');
+
+  // request ponds bill pay number
+  return post(PONDS_API_BILL_NUMBER_URL, body).then((response = {}) => {
+    // ensure success response
+    if (!isSuccessResponse(response)) {
+      throw new Error('Invalid Request');
+    }
+
+    // extract ponds bill pay number from response
+    const data = mergeObjects({}, response);
+
+    // return ponds bill pay number
+    return data;
+  });
+};
+
+/**
+ * @name fetchPondBillNumber
+ * @function fetchPondBillNumber
+ * @description Obtain pond bill pay number
+ * @param {object} optns Valid options
+ * @param {string} optns.plateNumber Valid customer car plate number
+ * @param {string} optns.phoneNumber Valid customer phone number
+ * @param {string} optns.pondNumber Valid pond number
+ * @param {Function} done a callback to invoke on success or error
+ * @author lally elias <lallyelias87@mail.com>
+ * @since 0.1.0
+ * @version 0.1.0
+ * @public
+ * @static
+ */
+export const fetchPondBillNumber = (optns, done) => {
+  getPondBillNumber(optns)
+    .then((bill) => {
+      done(null, bill);
+    })
+    .catch((error) => {
+      done(error);
+    });
+};
