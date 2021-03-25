@@ -178,12 +178,11 @@ export const getAccount = (optns) => {
       // spread api rsults
       spread((account = {}, bills = []) => {
         // prepare normalized account
-        const myAccount = {
+        let myAccount = {
           account: {},
           customer: {},
           bills: [],
           accessors: [],
-          fetchedAt: new Date(),
         };
 
         // merge account results
@@ -208,6 +207,19 @@ export const getAccount = (optns) => {
         myBills = [].concat(myCurrentBill).concat(myPreviousBills);
         myBills = orderBy([].concat(myBills), 'period.billedAt', 'desc');
         myAccount.bills = myBills;
+
+        // re-shape results
+        myAccount = mergeObjects(
+          {},
+          myAccount.account,
+          {
+            accessors: myAccount.accessors,
+            bills: myAccount.bills,
+          },
+          {
+            fetchedAt: new Date(),
+          }
+        );
 
         // return normalized account
         return myAccount;
