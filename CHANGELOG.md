@@ -1,3 +1,9 @@
+#### 0.5.1 (2021-03-25)
+
+##### Bug Fixes
+
+*  re-structure account response ([0ab04ec6](https://github.com/CodeTanzania/majifix-int-dawasco/commit/0ab04ec639e94055a7813c623f79db093bdef020))
+
 #### 0.5.0 (2021-03-24)
 
 ##### Chores
