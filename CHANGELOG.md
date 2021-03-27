@@ -1,3 +1,14 @@
+#### 0.6.0 (2021-03-27)
+
+##### Chores
+
+* **examples:**  add meter readings ([dd535d39](https://github.com/CodeTanzania/majifix-int-dawasco/commit/dd535d3927e610513cb0d9b58245949d86df7944))
+
+##### New Features
+
+*  post meter readings ([192a4f26](https://github.com/CodeTanzania/majifix-int-dawasco/commit/192a4f265e776b091257a692c1bcc4646fb081a5))
+*  normalize readings api options ([6284e9f4](https://github.com/CodeTanzania/majifix-int-dawasco/commit/6284e9f4a3ed5fca7b8a1eddab41a2c1f713c365))
+
 #### 0.5.1 (2021-03-25)
 
 ##### Bug Fixes

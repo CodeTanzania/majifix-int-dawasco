@@ -339,7 +339,7 @@ const normalizeApiOptions = (optns = {}) => {
   // common normalizer
   const toNormal = (val) => {
     if (val) {
-      return toUpper(replace(val, /\s/g, ''));
+      return toUpper(replace(String(val), /\s/g, ''));
     }
     return val;
   };
@@ -347,10 +347,13 @@ const normalizeApiOptions = (optns = {}) => {
   // normalize options
   const options = mergeObjects({
     cust_acc: toNormal(optns.accountNumber),
+    accountno: toNormal(optns.accountNumber),
     meter_no: toNormal(optns.meterNumber),
+    meterno: toNormal(optns.meterNumber),
     plateno: toNormal(optns.plateNumber),
     phoneno: toNormal(optns.phoneNumber),
     pond: toNormal(optns.pondNumber),
+    readings: toNormal(optns.readings),
   });
 
   // ensure phone number in E164
@@ -776,4 +779,79 @@ const fetchPondBillNumber = (optns, done) => {
     });
 };
 
-export { DEFAULT_ACCOUNT, DEFAULT_BILL, DEFAULT_BILL_CURRENCY, DEFAULT_BILL_DATE_FORMAT, DEFAULT_BILL_MONTH_FORMAT, DEFAULT_BILL_NOTES, DEFAULT_BILL_PAY_PERIOD, DEFAULT_BILL_PERIODS, DEFAULT_CUSTOMER_CATEGORY, DEFAULT_JURISDICTION, DEFAULT_JURISDICTION_CODES, DEFAULT_LOCALE, DEFAULT_PHONE_NUMBER, DEFAULT_SAMPLING_BILL_PERIODS, DEFAULT_USER, DEFAULT_USER_DATE_FORMAT, fetchAccount, fetchPondBillNumber };
+/**
+ * @name postMeterReadings
+ * @function postMeterReadings
+ * @description Post customer meter readings
+ * @param {object} optns Valid options
+ * @param {string} [optns.accountNumber] valid customer account number
+ * @param {string} [optns.meterNumber] valid customer meter number
+ * @param {string} optns.phoneNumber Valid customer phone number
+ * @param {string} optns.readings Valid meter number
+ * @returns {object} meter readings api response
+ * @author lally elias <lallyelias87@mail.com>
+ * @since 0.1.0
+ * @version 0.1.0
+ * @public
+ * @static
+ */
+const postMeterReadings = (optns) => {
+  // obtain meter readings api url
+  const BILL_API_METER_READINGS_URL = getString('BILL_API_METER_READINGS_URL');
+
+  // request customer details to get
+  // valid account number
+  return getCustomerDetails(optns)
+    .then((customer) => {
+      // obtain customer account number
+      const opts = mergeObjects({ accountNumber: customer.number }, optns);
+      return opts;
+    })
+    .then((opts) => {
+      // normalize api options
+      const body = normalizeApiOptions(opts);
+
+      // post meter readings
+      return post(BILL_API_METER_READINGS_URL, body);
+    })
+    .then((response = {}) => {
+      // ensure success response
+      if (!isSuccessResponse(response)) {
+        throw new Error(response.message || 'Invalid Request');
+      }
+
+      // extract current readings from response
+      const data = mergeObjects({}, response);
+
+      // return current readings
+      return data;
+    });
+};
+
+/**
+ * @name createMeterReadings
+ * @function createMeterReadings
+ * @description Create customer meter readings
+ * @param {object} optns Valid options
+ * @param {string} [optns.accountNumber] valid customer account number
+ * @param {string} [optns.meterNumber] valid customer meter number
+ * @param {string} optns.phoneNumber Valid customer phone number
+ * @param {string} optns.readings Valid meter number
+ * @param {Function} done a callback to invoke on success or error
+ * @author lally elias <lallyelias87@mail.com>
+ * @since 0.1.0
+ * @version 0.1.0
+ * @public
+ * @static
+ */
+const createMeterReadings = (optns, done) => {
+  postMeterReadings(optns)
+    .then((readings) => {
+      done(null, readings);
+    })
+    .catch((error) => {
+      done(error);
+    });
+};
+
+export { DEFAULT_ACCOUNT, DEFAULT_BILL, DEFAULT_BILL_CURRENCY, DEFAULT_BILL_DATE_FORMAT, DEFAULT_BILL_MONTH_FORMAT, DEFAULT_BILL_NOTES, DEFAULT_BILL_PAY_PERIOD, DEFAULT_BILL_PERIODS, DEFAULT_CUSTOMER_CATEGORY, DEFAULT_JURISDICTION, DEFAULT_JURISDICTION_CODES, DEFAULT_LOCALE, DEFAULT_PHONE_NUMBER, DEFAULT_SAMPLING_BILL_PERIODS, DEFAULT_USER, DEFAULT_USER_DATE_FORMAT, createMeterReadings, fetchAccount, fetchPondBillNumber };
