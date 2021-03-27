@@ -253,7 +253,7 @@ export const normalizeApiOptions = (optns = {}) => {
   // common normalizer
   const toNormal = (val) => {
     if (val) {
-      return toUpper(replace(val, /\s/g, ''));
+      return toUpper(replace(String(val), /\s/g, ''));
     }
     return val;
   };
@@ -261,10 +261,13 @@ export const normalizeApiOptions = (optns = {}) => {
   // normalize options
   const options = mergeObjects({
     cust_acc: toNormal(optns.accountNumber),
+    accountno: toNormal(optns.accountNumber),
     meter_no: toNormal(optns.meterNumber),
+    meterno: toNormal(optns.meterNumber),
     plateno: toNormal(optns.plateNumber),
     phoneno: toNormal(optns.phoneNumber),
     pond: toNormal(optns.pondNumber),
+    readings: toNormal(optns.readings),
   });
 
   // ensure phone number in E164

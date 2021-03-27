@@ -132,13 +132,17 @@ describe('majifix-int-dawasco', () => {
         plateNumber: 'T525ABC',
         phoneNumber: '255754625756',
         pondNumber: '6',
+        readings: '234',
       })
     ).to.eql({
       cust_acc: 'A8801866',
+      accountno: 'A8801866',
       meter_no: '15-17-D41320015',
+      meterno: '15-17-D41320015',
       plateno: 'T525ABC',
       phoneno: '255754625756',
       pond: '6',
+      readings: '234',
     });
 
     expect(
@@ -147,12 +151,16 @@ describe('majifix-int-dawasco', () => {
         meterNumber: '15-17- D41320015',
         plateNumber: 'T 525 ABC',
         phoneNumber: '255 7546 25756',
+        readings: '2 3 4',
       })
     ).to.eql({
       cust_acc: 'A8801866',
+      accountno: 'A8801866',
       meter_no: '15-17-D41320015',
+      meterno: '15-17-D41320015',
       plateno: 'T525ABC',
       phoneno: '255754625756',
+      readings: '234',
     });
   });
 
