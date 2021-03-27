@@ -8,6 +8,7 @@ import currentBillResponse from './fixtures/current_bill.json';
 import previousBillsResponse from './fixtures/previous_bills.json';
 // import billsDetails from './fixtures/bills.json';
 import pondResponse from './fixtures/ponds.json';
+import readingResponse from './fixtures/readings.json';
 
 import {
   DEFAULT_JURISDICTION,
@@ -28,6 +29,7 @@ import {
   DEFAULT_USER,
   fetchAccount,
   fetchPondBillNumber,
+  createMeterReadings,
 } from '../src';
 
 import {
@@ -44,6 +46,7 @@ import {
   getCustomerDetails,
   getBillHistory,
   getPondBillNumber,
+  postMeterReadings,
 } from '../src/api';
 
 describe('majifix-int-dawasco', () => {
@@ -339,7 +342,7 @@ describe('majifix-int-dawasco', () => {
     const optns = {
       plateNumber: 'T991DAU',
       phoneNumber: '255754625756',
-      pondNUmber: '1',
+      pondNumber: '1',
     };
 
     nock(process.env.BILL_API_BASE_URL)
@@ -365,7 +368,7 @@ describe('majifix-int-dawasco', () => {
     const optns = {
       plateNumber: 'T991DAU',
       phoneNumber: '255754625756',
-      pondNUmber: '1',
+      pondNumber: '1',
     };
 
     nock(process.env.BILL_API_BASE_URL)
@@ -377,6 +380,72 @@ describe('majifix-int-dawasco', () => {
       expect(bill).to.exist;
       expect(bill).to.be.eql(pondResponse);
       done(error, bill);
+    });
+  });
+
+  it('should post meter readings', (done) => {
+    process.env.BILL_API_BASE_URL = 'https://127.0.0.1/v1/';
+
+    process.env.BILL_API_METER_READINGS_URL =
+      'https://127.0.0.1/v1/meter_readings';
+
+    process.env.BILL_API_CUSTOMER_DETAILS_URL =
+      'https://127.0.0.1/v1/customer_details';
+
+    const optns = {
+      accountNumber: 'A8801866',
+      phoneNumber: '255754625756',
+      readings: '234',
+    };
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/customer_details')
+      .query(true)
+      .reply(200, customerResponse);
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/meter_readings')
+      .query(true)
+      .reply(200, readingResponse);
+
+    postMeterReadings(optns)
+      .then((readings) => {
+        expect(readings).to.exist;
+        expect(readings).to.be.eql(readingResponse);
+        done(null, readings);
+      })
+      .catch((error) => done(error));
+  });
+
+  it('should create meter readings', (done) => {
+    process.env.BILL_API_BASE_URL = 'https://127.0.0.1/v1/';
+
+    process.env.BILL_API_METER_READINGS_URL =
+      'https://127.0.0.1/v1/meter_readings';
+
+    process.env.BILL_API_CUSTOMER_DETAILS_URL =
+      'https://127.0.0.1/v1/customer_details';
+
+    const optns = {
+      meterNumber: '15-17-D00132154',
+      phoneNumber: '255754625756',
+      readings: '234',
+    };
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/customer_details')
+      .query(true)
+      .reply(200, customerResponse);
+
+    nock(process.env.BILL_API_BASE_URL)
+      .post('/meter_readings')
+      .query(true)
+      .reply(200, readingResponse);
+
+    createMeterReadings(optns, (error, readings) => {
+      expect(readings).to.exist;
+      expect(readings).to.be.eql(readingResponse);
+      done(error, readings);
     });
   });
 

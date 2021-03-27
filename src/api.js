@@ -313,3 +313,78 @@ export const fetchPondBillNumber = (optns, done) => {
       done(error);
     });
 };
+
+/**
+ * @name postMeterReadings
+ * @function postMeterReadings
+ * @description Post customer meter readings
+ * @param {object} optns Valid options
+ * @param {string} [optns.accountNumber] valid customer account number
+ * @param {string} [optns.meterNumber] valid customer meter number
+ * @param {string} optns.phoneNumber Valid customer phone number
+ * @param {string} optns.readings Valid meter number
+ * @returns {object} meter readings api response
+ * @author lally elias <lallyelias87@mail.com>
+ * @since 0.1.0
+ * @version 0.1.0
+ * @public
+ * @static
+ */
+export const postMeterReadings = (optns) => {
+  // obtain meter readings api url
+  const BILL_API_METER_READINGS_URL = getString('BILL_API_METER_READINGS_URL');
+
+  // request customer details to get
+  // valid account number
+  return getCustomerDetails(optns)
+    .then((customer) => {
+      // obtain customer account number
+      const opts = mergeObjects({ accountNumber: customer.number }, optns);
+      return opts;
+    })
+    .then((opts) => {
+      // normalize api options
+      const body = normalizeApiOptions(opts);
+
+      // post meter readings
+      return post(BILL_API_METER_READINGS_URL, body);
+    })
+    .then((response = {}) => {
+      // ensure success response
+      if (!isSuccessResponse(response)) {
+        throw new Error(response.message || 'Invalid Request');
+      }
+
+      // extract current readings from response
+      const data = mergeObjects({}, response);
+
+      // return current readings
+      return data;
+    });
+};
+
+/**
+ * @name createMeterReadings
+ * @function createMeterReadings
+ * @description Create customer meter readings
+ * @param {object} optns Valid options
+ * @param {string} [optns.accountNumber] valid customer account number
+ * @param {string} [optns.meterNumber] valid customer meter number
+ * @param {string} optns.phoneNumber Valid customer phone number
+ * @param {string} optns.readings Valid meter number
+ * @param {Function} done a callback to invoke on success or error
+ * @author lally elias <lallyelias87@mail.com>
+ * @since 0.1.0
+ * @version 0.1.0
+ * @public
+ * @static
+ */
+export const createMeterReadings = (optns, done) => {
+  postMeterReadings(optns)
+    .then((readings) => {
+      done(null, readings);
+    })
+    .catch((error) => {
+      done(error);
+    });
+};
